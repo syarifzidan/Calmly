@@ -2,6 +2,7 @@ import requests
 import json
 import re
 from datetime import date, timedelta, datetime
+from time_logic import update_duration
 
 today = date.today()
 
@@ -27,25 +28,9 @@ def clean_json(raw):
 
     try:
         events = json.loads(raw)
-        # print("succesfully parsed JSON, raw output was:")
-        # print(raw)
-        # print(type(raw))
-        # print(events)
-        # print(type(events))
 
-        time1_str = events["start_time"]
-        time2_str = events["end_time"]
-        FMT = "%H:%M"
+        update_duration(events)
 
-        # Convert strings to datetime objects using a base date (e.g., min date)
-        # This is necessary to subtract them
-        tdelta = datetime.strptime(time2_str, FMT) - datetime.strptime(time1_str, FMT)
-        total_minutes = int(tdelta.total_seconds() / 60)
-        # print(f"Time difference (timedelta object): {tdelta}")
-        # print(f"Total minutes: {total_minutes}")
-        events["duration"] = total_minutes
-        del events["end_time"]
-        # print(f"new events: {events}")
         return events
     except json.JSONDecodeError:
         print("Couldn't parse JSON, raw output was:")

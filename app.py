@@ -1,8 +1,7 @@
 from gcal import add_event
 from llm import extract_events
+from time_logic import update_duration
 
-# TODO: MAKE THE DATE EDITOR USE A DROP DOWN/CALENDAR SELECTOR
-# TODO: INSTEAD OF "DURATION" GIVE THE OPTION TO EDIT END TIME
 # TODO: (optional) make the site prettier
 
 # testing
@@ -49,16 +48,22 @@ def edit():
         new_title = request.form.get("new_title")
         new_date = request.form.get("new_date")
         new_start_time = request.form.get("new_start_time")
-        new_duration = request.form.get("new_duration")
+        # new_duration = request.form.get("new_duration")
+        new_end_time = request.form.get("new_end_time")
         if new_title:
             events["title"] = new_title
         if new_date:
             events["date"] = new_date
         if new_start_time:
             events["start_time"] = new_start_time
-        if new_duration:
-            events["duration"] = int(new_duration)
+        # if new_duration:
+        #     events["duration"] = int(new_duration)
+        if new_end_time:
+            events["end_time"] = new_end_time
+            update_duration(events)
+
         if request.form.get("finished"):
+            del events["end_time"]
             created_event = add_event(
                 events["title"],
                 events["date"],
@@ -73,6 +78,7 @@ def edit():
         date=events["date"],
         start_time=events["start_time"],
         duration=events["duration"],
+        end_time=events["end_time"],
         rawtext=sample_text,
     )
 

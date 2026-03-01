@@ -8,13 +8,16 @@
       <input type="text" name="new_title" placeholder="{{title}}" />
 
       <h3>Date: {{date}}</h3>
-      <input type="text" name="new_date" placeholder="{{date}}" />
+      <input type="date" name="new_date" value="{{date}}" />
 
       <h3>Start time: {{start_time}}</h3>
-      <input type="text" name="new_start_time" placeholder="{{start_time}}" />
+      <input type="time" name="new_start_time" value="{{start_time}}" />
 
-      <h3>Duration: {{duration}} minutes</h3>
-      <input type="text" name="new_duration" placeholder="{{duration}}" />
+      <!-- <h3>Duration: {{duration}} minutes</h3>
+      <input type="text" name="new_duration" placeholder="{{duration}}" /> -->
+
+      <h3>End time: {{end_time}}</h3>
+      <input type="time" name="new_end_time" value="{{end_time}}" />
 
       <input type="submit" value="Save Changes" />
       <input type="submit" name="finished" value="Finished" />
