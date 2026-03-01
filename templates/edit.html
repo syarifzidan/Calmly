@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>edit any of these as needed</h1>
+    <h2>raw text: {{rawtext}}</h2>
+    <form method="post">
+      <h3>Event Title: {{title}}</h3>
+      <input type="text" name="new_title" placeholder="{{title}}" />
+
+      <h3>Date: {{date}}</h3>
+      <input type="text" name="new_date" placeholder="{{date}}" />
+
+      <h3>Start time: {{start_time}}</h3>
+      <input type="text" name="new_start_time" placeholder="{{start_time}}" />
+
+      <h3>Duration: {{duration}} minutes</h3>
+      <input type="text" name="new_duration" placeholder="{{duration}}" />
+
+      <input type="submit" value="Save Changes" />
+      <input type="submit" name="finished" value="Finished" />
+    </form>
+  </body>
+</html>
