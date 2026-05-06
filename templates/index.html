@@ -1,10 +1,28 @@
 <!DOCTYPE html>
 <html>
   <body>
-    <h3>Enter event text</h3>
-    <form method="post">
-      <input type="text" name="raw_text" required />
+    <h1>Add event to Google Calendar</h1>
+
+    {% if error %}
+      <p style="color: red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+
+      <h3>Option 1: Paste event text</h3>
+      <textarea
+        style="width: 400px; height: 120px; font-size: 16px;"
+        name="raw_event_text"
+        placeholder="e.g. minggu depan utspnya di lab ssmi jam 9:00-11:30"
+      ></textarea>
+
       <br /><br />
+
+      <h3>Option 2: Upload a screenshot</h3>
+      <input type="file" name="event_image" accept="image/*" />
+
+      <br /><br />
+
       <input type="submit" value="Submit" />
     </form>
   </body>

@@ -45,3 +45,6 @@ def add_event(title, date, time, duration):
     created = service.events().insert(calendarId="primary", body=event)
     return created
     # print(f"Event created: {created.execute().get('htmlLink')}")
+
+
+# print(os.path.exists("token.json"))

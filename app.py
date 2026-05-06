@@ -1,42 +1,47 @@
 from gcal import add_event
-from llm import extract_events
+from llm import extract_events, extract_events_from_image
 from time_logic import update_duration
-
-# TODO: (optional) make the site prettier
-
-# testing
-# add_event("Test Event", "2026-03-06", "14:00", 60)
-
-
-# # sample_text = input()
-# events = extract_events(sample_text)
-# print("event information:")
-# for event in events:
-#     print(f"{event} : {events[event]}")
-
-
-# print("input a number to edit the event:\n1. title\n2. date\n3. start time\n4.duration")
-# add_event(events["title"], events["date"], events["start_time"], events["duration"])
-
+import os
+import uuid
 
 from flask import Flask, request, render_template, redirect, url_for
 
 app = Flask(__name__)
 
+UPLOAD_FOLDER = "uploads"
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+events = {}
+event_text = ""
+link = ""
+
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     global events
-    global sample_text
+    global event_text
     if request.method == "POST":
-        sample_text = request.form["raw_text"]
-        events = extract_events(sample_text)
-        # created_event = add_event(
-        #     events["title"], events["date"], events["start_time"], events["duration"]
-        # )
-        # return f"Event created: {created_event.execute().get('htmlLink')}"
-        print(f"edit url: {url_for('edit')} ")
+        image_file = request.files.get("event_image")
+        raw_text = request.form.get("raw_event_text", "").strip()
+
+        if image_file and image_file.filename:
+            # Save image to a temp file, extract event from it
+            ext = os.path.splitext(image_file.filename)[1].lower()
+            tmp_path = os.path.join(UPLOAD_FOLDER, f"{uuid.uuid4()}{ext}")
+            image_file.save(tmp_path)
+            event_text = f"[Image: {image_file.filename}]"
+            events = extract_events_from_image(tmp_path)
+            os.remove(tmp_path)  # clean up after extraction
+        elif raw_text:
+            event_text = raw_text
+            events = extract_events(event_text)
+        else:
+            return render_template(
+                "index.html", error="Please enter text or upload an image."
+            )
+
         return redirect(url_for("edit"))
+
     return render_template("index.html")
 
 
@@ -48,16 +53,14 @@ def edit():
         new_title = request.form.get("new_title")
         new_date = request.form.get("new_date")
         new_start_time = request.form.get("new_start_time")
-        # new_duration = request.form.get("new_duration")
         new_end_time = request.form.get("new_end_time")
+
         if new_title:
             events["title"] = new_title
         if new_date:
             events["date"] = new_date
         if new_start_time:
             events["start_time"] = new_start_time
-        # if new_duration:
-        #     events["duration"] = int(new_duration)
         if new_end_time:
             events["end_time"] = new_end_time
             update_duration(events)
@@ -72,6 +75,7 @@ def edit():
             )
             link = created_event.execute().get("htmlLink")
             return redirect(url_for("finished"))
+
     return render_template(
         "edit.html",
         title=events["title"],
@@ -79,7 +83,7 @@ def edit():
         start_time=events["start_time"],
         duration=events["duration"],
         end_time=events["end_time"],
-        rawtext=sample_text,
+        rawtext=event_text,
     )
 
 
