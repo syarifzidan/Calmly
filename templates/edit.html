@@ -1,26 +1,235 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <h1>edit any of these as needed</h1>
-    <h2>raw text: {{rawtext}}</h2>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Review Event — Calmly</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f11;
+      --surface: #18181c;
+      --surface2: #202026;
+      --border: #2a2a30;
+      --accent: #6ee7b7;
+      --accent-dim: #1e3a30;
+      --text: #e8e8ec;
+      --muted: #6b6b75;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .wrapper {
+      width: 100%;
+      max-width: 560px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 2rem;
+    }
+    .logo-icon {
+      width: 32px; height: 32px;
+      background: var(--accent);
+      border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .logo-icon svg { width: 17px; height: 17px; color: #0f0f11; }
+    .logo-text {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.1rem;
+    }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 0.35rem;
+    }
+    .subtitle { color: var(--muted); font-size: 0.875rem; margin-bottom: 1.75rem; }
+
+    .raw-box {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+      white-space: pre-wrap;
+      word-break: break-word;
+      max-height: 120px;
+      overflow-y: auto;
+    }
+    .raw-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .field { margin-bottom: 1.25rem; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+
+    .current-val {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="time"] {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      padding: 0.65rem 0.85rem;
+      outline: none;
+      transition: border-color 0.2s;
+      color-scheme: dark;
+    }
+    input:focus { border-color: var(--accent); }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .duration-badge {
+      display: inline-block;
+      background: var(--accent-dim);
+      color: var(--accent);
+      border-radius: 20px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-top: 0.75rem;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .btn {
+      padding: 0.85rem;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-secondary {
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent); }
+    .btn-primary {
+      background: var(--accent);
+      color: #0f0f11;
+    }
+    .btn-primary:hover { opacity: 0.9; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+        </svg>
+      </div>
+      <span class="logo-text">Calmly</span>
+    </div>
+
+    <h1>Review &amp; Edit</h1>
+    <p class="subtitle">We extracted the details below — correct anything that looks off.</p>
+
+    <div class="raw-label">Extracted from</div>
+    <div class="raw-box">{{ rawtext }}</div>
+
     <form method="post">
-      <h3>Event Title: {{title}}</h3>
-      <input type="text" name="new_title" placeholder="{{title}}" />
+      <div class="card">
 
-      <h3>Date: {{date}}</h3>
-      <input type="date" name="new_date" value="{{date}}" />
+        <div class="field">
+          <label>Event Title</label>
+          <div class="current-val">{{ title }}</div>
+          <input type="text" name="new_title" placeholder="Override title…"/>
+        </div>
 
-      <h3>Start time: {{start_time}}</h3>
-      <input type="time" name="new_start_time" value="{{start_time}}" />
+        <div class="field">
+          <label>Date</label>
+          <div class="current-val">{{ date }}</div>
+          <input type="date" name="new_date" value="{{ date }}"/>
+        </div>
 
-      <!-- <h3>Duration: {{duration}} minutes</h3>
-      <input type="text" name="new_duration" placeholder="{{duration}}" /> -->
+        <div class="field row">
+          <div>
+            <label>Start Time</label>
+            <div class="current-val">{{ start_time }}</div>
+            <input type="time" name="new_start_time" value="{{ start_time }}"/>
+          </div>
+          <div>
+            <label>End Time</label>
+            <div class="current-val">{{ end_time }}</div>
+            <input type="time" name="new_end_time" value="{{ end_time }}"/>
+          </div>
+        </div>
 
-      <h3>End time: {{end_time}}</h3>
-      <input type="time" name="new_end_time" value="{{end_time}}" />
+        <div class="duration-badge">⏱ {{ duration }} minutes</div>
 
-      <input type="submit" value="Save Changes" />
-      <input type="submit" name="finished" value="Finished" />
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-secondary">Save Changes</button>
+        <button type="submit" name="finished" value="1" class="btn btn-primary">Add to Calendar →</button>
+      </div>
     </form>
-  </body>
+  </div>
+</body>
 </html>

@@ -1,10 +1,144 @@
 <!DOCTYPE html>
-<html>
-  <body>
-    <h1>Event created:</h1>
-    <a href="{{link}}" target="_blank"> {{link}}</a>
-    <form method="post">
-      <input type="submit" name="return" value="Return" />
-    </form>
-  </body>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Event Created — Calmly</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f11;
+      --surface: #18181c;
+      --border: #2a2a30;
+      --accent: #6ee7b7;
+      --accent-dim: #1e3a30;
+      --text: #e8e8ec;
+      --muted: #6b6b75;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 440px;
+      text-align: center;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .check {
+      width: 60px; height: 60px;
+      background: var(--accent-dim);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+    }
+    .check svg { width: 28px; height: 28px; color: var(--accent); }
+
+    h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 1.6rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .link-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+      text-align: left;
+    }
+    .link-box a {
+      color: var(--accent);
+      font-size: 0.85rem;
+      text-decoration: none;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+    .link-box a:hover { text-decoration: underline; }
+    .link-icon { flex-shrink: 0; color: var(--muted); }
+
+    .actions { display: flex; flex-direction: column; gap: 0.75rem; }
+
+    .btn {
+      padding: 0.85rem;
+      border: none;
+      border-radius: 10px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { background: var(--accent); color: #0f0f11; }
+    .btn-primary:hover { opacity: 0.9; }
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { color: var(--text); border-color: var(--text); }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="check">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+
+    <h1>Event Created!</h1>
+    <p class="subtitle">Your event has been added to Google Calendar.</p>
+
+    <div class="link-box">
+      <svg class="link-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
+      </svg>
+      <a href="{{ link }}" target="_blank">{{ link }}</a>
+    </div>
+
+    <div class="actions">
+      <a href="{{ link }}" target="_blank" class="btn btn-primary">Open in Google Calendar</a>
+      <form method="post" style="margin:0;">
+        <button type="submit" name="return" value="1" class="btn btn-ghost">← Add another event</button>
+      </form>
+    </div>
+  </div>
+</body>
 </html>

@@ -25,13 +25,12 @@ def index():
         raw_text = request.form.get("raw_event_text", "").strip()
 
         if image_file and image_file.filename:
-            # Save image to a temp file, extract event from it
             ext = os.path.splitext(image_file.filename)[1].lower()
             tmp_path = os.path.join(UPLOAD_FOLDER, f"{uuid.uuid4()}{ext}")
             image_file.save(tmp_path)
-            event_text = f"[Image: {image_file.filename}]"
-            events = extract_events_from_image(tmp_path)
-            os.remove(tmp_path)  # clean up after extraction
+            # extract_events_from_image now returns (events_dict, ocr_text)
+            events, event_text = extract_events_from_image(tmp_path)
+            os.remove(tmp_path)
         elif raw_text:
             event_text = raw_text
             events = extract_events(event_text)
