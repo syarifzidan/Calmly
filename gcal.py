@@ -6,21 +6,26 @@ import os
 
 SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
+# Always resolve paths relative to this file, not the working directory
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CREDENTIALS_PATH = os.path.join(BASE_DIR, "credentials.json")
+TOKEN_PATH = os.path.join(BASE_DIR, "token.json")
+
 
 def get_calendar_service():
     creds = None
 
-    if os.path.exists("token.json"):
-        creds = Credentials.from_authorized_user_file("token.json", SCOPES)
+    if os.path.exists(TOKEN_PATH):
+        creds = Credentials.from_authorized_user_file(TOKEN_PATH, SCOPES)
 
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file(CREDENTIALS_PATH, SCOPES)
             creds = flow.run_local_server(port=0)
 
-        with open("token.json", "w") as token:
+        with open(TOKEN_PATH, "w") as token:
             token.write(creds.to_json())
 
     return build("calendar", "v3", credentials=creds)
@@ -29,7 +34,6 @@ def get_calendar_service():
 def add_event(title, date, time, duration):
     service = get_calendar_service()
 
-    # Build start and end times
     start = f"{date}T{time}:00"
     from datetime import datetime, timedelta
 
@@ -44,7 +48,3 @@ def add_event(title, date, time, duration):
 
     created = service.events().insert(calendarId="primary", body=event)
     return created
-    # print(f"Event created: {created.execute().get('htmlLink')}")
-
-
-# print(os.path.exists("token.json"))
